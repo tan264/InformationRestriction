@@ -4,6 +4,7 @@
 
 import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.{Files, Paths}
+import scala.collection.mutable
 import scala.io.Source
 import scala.jdk.CollectionConverters.*
 
@@ -24,30 +25,29 @@ def main(): Unit = {
         case None =>
           println(s"Failed to read file: $filePath")
       }
-    }
-    )
+    })
 //    mapDocIdToTokens.foreach((k, v) => println(s"DocID: $k, Tokens: $v"))
 
     // generate a map of tokens to docID
-    var mapTokenToDocIds = Map[String, Set[String]]()
+    val mapTokenToDocIds = mutable.TreeMap[String, mutable.TreeSet[String]]()
     mapDocIdToTokens.foreach((docID, tokens) => {
       tokens.foreach(token => {
         if (mapTokenToDocIds.contains(token)) {
           val setDocId = mapTokenToDocIds(token)
-          mapTokenToDocIds += (token -> (setDocId + docID))
+          mapTokenToDocIds += (token -> setDocId.union(Set(docID)))
         } else {
-          mapTokenToDocIds += (token -> Set(docID))
+          mapTokenToDocIds += (token -> mutable.TreeSet(docID))
         }
       })
     })
-//    mapTokensToDocId.foreach((k, v) => println(s"Token: $k, DocIDs: $v"))
-    writeFile("index.txt", generateContentToWrite(mapTokenToDocIds))
+//    mapTokenToDocIds.foreach((k, v) => println(s"Token: $k, DocIDs: $v"))
+//    writeFile("index.txt", generateContentToWrite(mapTokenToDocIds))
   } catch {
     case e: Throwable => println(e)
   }
 }
 
-def generateContentToWrite(mapTokenToDocIds: Map[String, Set[String]]): String = {
+def generateContentToWrite(mapTokenToDocIds: mutable.TreeMap[String, mutable.TreeSet[String]]): String = {
   val sb = new StringBuilder
   mapTokenToDocIds.foreach((token, docIds) => {
     sb.append(token + "\t")
