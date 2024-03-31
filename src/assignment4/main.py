@@ -40,7 +40,7 @@ def build_inverted_index(docs):
 
 def saveToJson(inverted_index):
     inverted_index_json = {term: list(doc_ids) for term, doc_ids in inverted_index.items()}
-    with open("inverted_index.json", "w", encoding="utf-8") as file:
+    with open("DangHuuTan.json", "w", encoding="utf-8") as file:
         json.dump(inverted_index_json, file, ensure_ascii=False)
 
 def readDocs():
