@@ -147,7 +147,7 @@ def rankedSearch(query, docs):
 def createGUI():
     root = Tk()
     root.title("Gu Gồ Sớt")
-    root.geometry("700x300")
+    root.geometry("730x300")
 
     frame_interact = Frame(root)
     frame_interact.pack(side=TOP, fill=X, expand=True)
@@ -162,7 +162,7 @@ def createGUI():
     entry = Entry(frame_interact, textvariable=query, width=35)
     entry.pack(side=LEFT)
 
-    button_search = Button(frame_interact, text="Search", command=lambda: text.insert(
+    button_search = Button(frame_interact, text="Boolean search", command=lambda: text.insert(
         END, "Query: " + str(query.get()) + "\n  ->Result: " + str(search(inverted_index, query.get())) + "\n") if inverted_index 
         else text.insert(END, "Inverted index not loaded!\n", "error")
     )
@@ -208,7 +208,6 @@ def createGUI():
     button_build_inverted_index.pack(side=LEFT)
 
     text = Text(root)
-    text.bind("<Key>", lambda e: "break")
     text.pack(side=BOTTOM, fill=BOTH, expand=True)
     text.tag_config("error", foreground="red")
     text.tag_config("loaded", foreground="green")
@@ -221,6 +220,7 @@ def createGUI():
         url = map_url[int(tokens[1])]
         webbrowser.open(url)
     text.tag_bind("url", "<Button-1>", lambda e: handle_url_click(e, text))
+    text.insert(END, "Welcome to Gu Gồ Sớt!\nTry to search something. Ex: \"lễ hội\"\n", "loaded")
 
     root.mainloop()
 
