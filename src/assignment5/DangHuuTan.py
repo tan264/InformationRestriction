@@ -80,7 +80,7 @@ def readInvertedIndex():
 # search And operation, for example: tom AND good jerry
 def searchAnd(inverted_index, query):
     query = query.split(" and ")
-    query = [token for token in query if token != ""]
+    query = [token.strip() for token in query if token != ""]
     if len(query) == 0:
         return set()
     result = inverted_index[query[0]]
@@ -93,7 +93,7 @@ def searchAnd(inverted_index, query):
 # search Or operation, for example: tom OR good jerry
 def searchOr(inverted_index, query):
     query = query.split(" or ")
-    query = [token for token in query if token != ""]
+    query = [token.strip() for token in query if token != ""]
     result = set()
     for term in query:
         result = result.union(inverted_index[term])
